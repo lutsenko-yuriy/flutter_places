@@ -3,9 +3,12 @@ import 'package:flutter_places/helpers/location_helper.dart';
 import 'package:location/location.dart' as location;
 
 import '../models/location.dart' as model;
+import '../screens/maps_screen.dart';
 
 class LocationInput extends StatefulWidget {
-  const LocationInput({Key? key}) : super(key: key);
+  final Function(model.Location) onLocationUpdated;
+
+  const LocationInput({Key? key, required this.onLocationUpdated}) : super(key: key);
 
   @override
   State<LocationInput> createState() => _LocationInputState();
@@ -15,17 +18,33 @@ class _LocationInputState extends State<LocationInput> {
   model.Location? _location;
   String? _previewImageUrl;
 
+  void _updateState(model.Location locationModel) {
+    widget.onLocationUpdated(locationModel);
+    setState(() {
+      _location = locationModel;
+      _previewImageUrl =
+          LocationHelper.generateLocationPreviewImage(location: locationModel);
+    });
+  }
+
   Future<void> _getCurrentUserLocation() async {
     final locData = await location.Location().getLocation();
 
     var locationModel = model.Location(
         latitude: locData.latitude!, longitude: locData.longitude!);
 
-    setState(() {
-      _location = locationModel;
-      _previewImageUrl =
-          LocationHelper.generateLocationPreviewImage(location: locationModel);
-    });
+    _updateState(locationModel);
+  }
+
+  Future<void> _selectOnMap() async {
+    final selectedLocation = await Navigator.of(context).push(MaterialPageRoute(
+        fullscreenDialog: true, builder: (ctx) => MapScreen(initialLocation: _location)));
+
+    if (selectedLocation == null) {
+      return;
+    }
+
+    _updateState(selectedLocation);
   }
 
   @override
@@ -59,7 +78,7 @@ class _LocationInputState extends State<LocationInput> {
               )),
             ),
             TextButton.icon(
-              onPressed: () {},
+              onPressed: _selectOnMap,
               icon: const Icon(Icons.map),
               label: const Text('Select on map'),
               style: TextButton.styleFrom(

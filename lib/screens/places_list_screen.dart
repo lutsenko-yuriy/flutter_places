@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_places/providers/great_places.dart';
 import 'package:flutter_places/screens/add_place_screen.dart';
+import 'package:flutter_places/screens/place_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 class PlacesListScreen extends StatelessWidget {
@@ -8,6 +9,10 @@ class PlacesListScreen extends StatelessWidget {
 
   void _openAddNewPlaceScreen(BuildContext context) {
     Navigator.of(context).pushNamed(AddPlaceScreen.routeName);
+  }
+
+  void _openPlaceDetailsScreen(BuildContext context, String placeId) {
+    Navigator.of(context).pushNamed(PlaceDetailScreen.routeName, arguments: placeId);
   }
 
   @override
@@ -43,7 +48,7 @@ class PlacesListScreen extends StatelessWidget {
                                         greatPlaces.items[i].location.address != null
                                             ? Text(greatPlaces.items[i].location.address!)
                                             : null,
-                                    onTap: () {},
+                                    onTap: () => _openPlaceDetailsScreen(context, greatPlaces.items[i].id),
                                   ));
                     },
                     child: const Center(

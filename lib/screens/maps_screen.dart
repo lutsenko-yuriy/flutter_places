@@ -19,6 +19,12 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   model.Location? _pickedLocation;
 
+  @override
+  void initState() {
+    _pickedLocation = widget.initialLocation;
+    super.initState();
+  }
+
   void _savePosition() {
     Navigator.of(context).pop(_pickedLocation);
   }
@@ -31,7 +37,7 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final initialLocation = widget.initialLocation ?? const model.Location(latitude: 37.422131, longitude: -122.084801);
+    final initialLocation = _pickedLocation ?? const model.Location(latitude: 37.422131, longitude: -122.084801);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Map"),

@@ -21,24 +21,31 @@ class PlacesListScreen extends StatelessWidget {
               icon: const Icon(Icons.add))
         ],
       ),
-      body: Consumer<GreatPlaces>(
-          builder: (context, greatPlaces, child) {
-            return greatPlaces.items.isEmpty
-                ? child!
-                : ListView.builder(
-                    itemCount: greatPlaces.items.length,
-                    itemBuilder: (ctx, i) => ListTile(
-                          leading: CircleAvatar(
-                              backgroundImage:
-                                  FileImage(greatPlaces.items[i].image)),
-                          title: Text(greatPlaces.items[i].title),
-                          onTap: () {},
-                        )
-            );
-          },
-          child: const Center(
-            child: Text("Got no place to show"),
-          )),
+      body: FutureBuilder(
+          future: context.read<GreatPlaces>().fetchAndSetPlaces(),
+          builder: (context, snapshot) {
+            return snapshot.connectionState == ConnectionState.waiting
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Consumer<GreatPlaces>(
+                    builder: (context, greatPlaces, child) {
+                      return greatPlaces.items.isEmpty
+                          ? child!
+                          : ListView.builder(
+                              itemCount: greatPlaces.items.length,
+                              itemBuilder: (ctx, i) => ListTile(
+                                    leading: CircleAvatar(
+                                        backgroundImage: FileImage(
+                                            greatPlaces.items[i].image)),
+                                    title: Text(greatPlaces.items[i].title),
+                                    onTap: () {},
+                                  ));
+                    },
+                    child: const Center(
+                      child: Text("Got no place to show"),
+                    ));
+          }),
     );
   }
 }

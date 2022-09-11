@@ -1,9 +1,12 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_places/db/db_helpers.dart';
+
+import '../models/location.dart';
 import '../models/place.dart';
 
 class GreatPlaces with ChangeNotifier {
-
   List<Place> _items = [];
 
   List<Place> get items {
@@ -12,6 +15,24 @@ class GreatPlaces with ChangeNotifier {
 
   void addPlace(Place place) {
     _items.add(place);
+    notifyListeners();
+    DBHelper.insert('places',
+        {'id': place.id, 'title': place.title, 'image': place.image.path});
+  }
+
+  Future<void> fetchAndSetPlaces() async {
+    final data = await DBHelper.getData('places');
+    final places = data
+        .map((e) => Place(
+            id: e['id'],
+            title: e['title'],
+            image: File(e['image']),
+            location: Location(latitude: 0.0, longitude: 0.0)))
+        .toList();
+
+    _items.clear();
+    _items.addAll(places);
+
     notifyListeners();
   }
 }

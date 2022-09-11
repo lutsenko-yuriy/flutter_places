@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_places/db/db_helpers.dart';
 
+import '../helpers/db_helpers.dart';
 import '../models/location.dart';
 import '../models/place.dart';
 

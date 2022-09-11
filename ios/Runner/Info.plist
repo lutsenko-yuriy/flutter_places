@@ -32,6 +32,8 @@
 	<string>We don't actually need microphone</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>In order to take photos of places we need a camera or file system</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>In order to capture a location of a place to save for future we need a location permission</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

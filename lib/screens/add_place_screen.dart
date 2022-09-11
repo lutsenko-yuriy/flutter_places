@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_places/models/location.dart';
 import 'package:flutter_places/providers/great_places.dart';
+import 'package:flutter_places/widgets/location_input.dart';
 import 'package:provider/provider.dart';
 
 import '../models/place.dart';
@@ -57,10 +58,10 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                       decoration: const InputDecoration(labelText: 'Title'),
                       controller: _titleController,
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    ImageInput(onSelectImage: _selectImage)
+                    const SizedBox(height: 10,),
+                    ImageInput(onSelectImage: _selectImage),
+                    const SizedBox(height: 10,),
+                    const LocationInput()
                   ],
                 ),
               ),
